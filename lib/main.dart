@@ -25,6 +25,9 @@ Future<void> main(List<String> args) async{
   final bloc = CounterBloc();
   // final streamSubscription = bloc.listen();
   bloc.add(CounterEvent.increment);
+  bloc.add(CounterEvent.increment);
+  bloc.add(CounterEvent.decrement);
+  bloc.add(CounterEvent.decrement);
   await Future.delayed(Duration.zero);
   await bloc.close(); 
 }
