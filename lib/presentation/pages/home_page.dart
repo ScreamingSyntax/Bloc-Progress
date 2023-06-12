@@ -1,5 +1,5 @@
-import 'package:day1/presentation/pages/second_page.dart';
-import 'package:day1/presentation/pages/third_page.dart';
+// import 'package:day1/presentation/pages/second_page.dart';
+// import 'package:day1/presentation/pages/third_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,24 +61,12 @@ class HomePage extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                              value: BlocProvider.of<CounterCubit>(context),
-                              child: SecondPage(),
-                            )));
+                Navigator.pushNamed(context, "/second");
               },
               child: Text("Go to Second Screen")),
           ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                              value: BlocProvider.of<CounterCubit>(context),
-                              child: ThirdPage(),
-                            )));
+                Navigator.pushNamed(context, "/third");
               },
               child: Text("Got to Third Screen"))
         ],
