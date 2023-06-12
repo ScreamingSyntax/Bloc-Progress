@@ -1,33 +1,32 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:day1/Logic/cubit/counter_cubit.dart';
-
+import 'package:day1/logic/cubit/CounterCubit.dart';
+import 'package:day1/logic/cubit/CounterState.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  CounterCubit counterCubit = CounterCubit();
-
-  group('Counter Cubit', () {
+  CounterCubit _counterCubit = CounterCubit();
+  group('This is to test the CounterCubit functions', () {
     setUp(() {
-      counterCubit;
+      _counterCubit = CounterCubit();
     });
-    tearDown(() => {counterCubit.close()});
+    tearDown(() {
+      _counterCubit.close();
+    });
     test(
-        'The Counter Cubit should have a initial state of CounterState(counterValue:0, isIncremented:false)',
+        'This is to test whether the default CounterCubit state is CounterState(counterValue:0,isIncremented:false)',
         () {
-      expect(counterCubit.state,
-          CounterState(counterValue: 0, wasIncremented: false));
+      expect(_counterCubit.state,
+          CounterState(counterValue: 0, isIncremented: false));
     });
   });
   blocTest(
-    'The increment() function should emit a state where the value is CounterState(counterValue:1,isIncremented:true)',
-    build: () => CounterCubit(),
-    act: (bloc) => bloc.increment(),
-    expect: () => [CounterState(counterValue: 1, wasIncremented: true)],
-  );
+      'This is to test whether the increment function emits a state where CounterState(counterValue:1, isIncremented:true)',
+      build: () => _counterCubit,
+      act: (bloc) => bloc.increment(),
+      expect: () => [CounterState(counterValue: 1, isIncremented: true)]);
   blocTest(
-    'The decrement() function should emit a state where the value is CounterState(counterValue:-1,isIncremented:false)',
-    build: () => CounterCubit(),
-    act: (bloc) => bloc.decrement(),
-    expect: () => [CounterState(counterValue: -1, wasIncremented: false)],
-  );
+      'This is to test whether the increment function emits a state where CounterState(counterValue:-1, isIncremented:false)',
+      build: () => _counterCubit,
+      act: (bloc) => bloc.decrement(),
+      expect: () => [CounterState(counterValue: -1, isIncremented: false)]);
 }
