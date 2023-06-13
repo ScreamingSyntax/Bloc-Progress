@@ -1,4 +1,3 @@
-import 'package:day1/logic/cubit/CounterCubit.dart';
 import 'package:day1/presentation/pages/home_page.dart';
 import 'package:day1/presentation/pages/second_page.dart';
 import 'package:day1/presentation/pages/third_page.dart';
