@@ -1,10 +1,13 @@
 // import 'package:day1/presentation/pages/second_page.dart';
 // import 'package:day1/presentation/pages/third_page.dart';
+import 'package:day1/constants/enums.dart';
+import 'package:day1/logic/cubit/internet_cubit.dart';
+import 'package:day1/logic/cubit/internet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../logic/cubit/CounterCubit.dart';
-import '../../logic/cubit/CounterState.dart';
+import '../../logic/cubit/counter_cubit.dart';
+import '../../logic/cubit/counter_state.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -17,6 +20,20 @@ class HomePage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          BlocBuilder<InternetCubit, InternetState>(
+            builder: (context, state) {
+              if (state is InternetConnectedState &&
+                  state.connectionType == ConnectionType.wifi) {
+                return Text("Wifi Connected");
+              } else if (state is InternetConnectedState &&
+                  state.connectionType == ConnectionType.mobile) {
+                return Text("Mobile Data Connected");
+              } else if (state is InternetDisconnectedState) {
+                return Text("Internet Disconnected");
+              }
+              return CircularProgressIndicator();
+            },
+          ),
           const Text("The no. of times you pressed this button"),
           BlocConsumer<CounterCubit, CounterState>(
             listener: (context, state) {

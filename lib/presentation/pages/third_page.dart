@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../logic/cubit/CounterCubit.dart';
-import '../../logic/cubit/CounterState.dart';
+import '../../logic/cubit/counter_cubit.dart';
+import '../../logic/cubit/counter_state.dart';
 
 class ThirdPage extends StatelessWidget {
   @override
