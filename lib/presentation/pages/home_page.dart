@@ -12,81 +12,95 @@ import '../../logic/cubit/counter_state.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text("First Screen"),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BlocBuilder<InternetCubit, InternetState>(
-            builder: (context, state) {
+    return BlocListener<InternetCubit, InternetState>(
+      listener: (context, state) {
+        if (state is InternetConnectedState &&
+            state.connectionType == ConnectionType.wifi) {
+          BlocProvider.of<CounterCubit>(context).increment();
+        } else if (state is InternetConnectedState &&
+            state.connectionType == ConnectionType.mobile) {
+          BlocProvider.of<CounterCubit>(context).increment();
+        } else if (state is InternetDisconnectedState) {
+          BlocProvider.of<CounterCubit>(context).decrement();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: Text("First Screen"),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BlocBuilder<InternetCubit, InternetState>(
+                builder: (context, state) {
               if (state is InternetConnectedState &&
                   state.connectionType == ConnectionType.wifi) {
                 return Text("Wifi Connected");
-              } else if (state is InternetConnectedState &&
+              }
+              if (state is InternetConnectedState &&
                   state.connectionType == ConnectionType.mobile) {
                 return Text("Mobile Data Connected");
-              } else if (state is InternetDisconnectedState) {
+              }
+              if (state is InternetDisconnectedState) {
                 return Text("Internet Disconnected");
               }
               return CircularProgressIndicator();
-            },
-          ),
-          const Text("The no. of times you pressed this button"),
-          BlocConsumer<CounterCubit, CounterState>(
-            listener: (context, state) {
-              if (state.isIncremented == true) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Incremented"),
-                  duration: Duration(seconds: 1),
-                ));
-              }
-              if (state.isIncremented == false) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Decremented"),
-                  duration: Duration(seconds: 1),
-                ));
-              }
-            },
-            builder: (context, state) {
-              return Text(
-                "${BlocProvider.of<CounterCubit>(context).state.counterValue}",
-                style: Theme.of(context).textTheme.displayMedium,
-              );
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              FloatingActionButton(
-                heroTag: '11',
-                onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).decrement();
-                },
-                child: const Icon(Icons.remove),
-              ),
-              FloatingActionButton(
-                heroTag: '12',
-                onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).increment();
-                },
-                child: const Icon(Icons.add),
-              ),
-            ],
-          ),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/second");
+            }),
+            const Text("The no. of times you pressed this button"),
+            BlocConsumer<CounterCubit, CounterState>(
+              listener: (context, state) {
+                if (state.isIncremented == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Incremented"),
+                    duration: Duration(seconds: 1),
+                  ));
+                }
+                if (state.isIncremented == false) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Decremented"),
+                    duration: Duration(seconds: 1),
+                  ));
+                }
               },
-              child: Text("Go to Second Screen")),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/third");
+              builder: (context, state) {
+                return Text(
+                  "${BlocProvider.of<CounterCubit>(context).state.counterValue}",
+                  style: Theme.of(context).textTheme.displayMedium,
+                );
               },
-              child: Text("Got to Third Screen"))
-        ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                FloatingActionButton(
+                  heroTag: '11',
+                  onPressed: () {
+                    BlocProvider.of<CounterCubit>(context).decrement();
+                  },
+                  child: const Icon(Icons.remove),
+                ),
+                FloatingActionButton(
+                  heroTag: '12',
+                  onPressed: () {
+                    BlocProvider.of<CounterCubit>(context).increment();
+                  },
+                  child: const Icon(Icons.add),
+                ),
+              ],
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/second");
+                },
+                child: Text("Go to Second Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/third");
+                },
+                child: Text("Got to Third Screen"))
+          ],
+        ),
       ),
     );
   }
