@@ -1,70 +1,49 @@
+import 'package:day1/logic/cubit/settings_cubit.dart';
+import 'package:day1/logic/cubit/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../logic/cubit/counter_cubit.dart';
-import '../../logic/cubit/counter_state.dart';
 
 class ThirdPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text("Third Screen"),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("The no. of times you pressed this button"),
-          BlocConsumer<CounterCubit, CounterState>(
-            listener: (context, state) {
-              if (state.isIncremented == true) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Incremented"),
-                  duration: Duration(seconds: 1),
-                ));
-              }
-              if (state.isIncremented == false) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Decremented"),
-                  duration: Duration(seconds: 1),
-                ));
-              }
-            },
-            builder: (context, state) {
-              return Text(
-                "${BlocProvider.of<CounterCubit>(context).state.counterValue}",
-                style: Theme.of(context).textTheme.displayMedium,
-              );
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: BlocListener<SettingsCubit, SettingsState>(
+        listener: (context, state) {
+          final settingsSnackBar = SnackBar(
+              content: Text(
+                  "App Notification : ${context.read<SettingsCubit>().state.appNotifications}     Email Notification : ${context.read<SettingsCubit>().state.emailNotifications}"));
+          ScaffoldMessenger.of(context).showSnackBar(settingsSnackBar);
+        },
+        child: SafeArea(
+          child: Column(
             children: [
-              FloatingActionButton(
-                heroTag: '12',
-                // tooltip: '11',
-                onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).decrement();
+              BlocBuilder<SettingsCubit, SettingsState>(
+                builder: (context, state) {
+                  return SwitchListTile(
+                    title: const Text("App Notifications"),
+                    value: state.appNotifications,
+                    onChanged: (changedValue) {
+                      BlocProvider.of<SettingsCubit>(context)
+                          .onAppNotifications(changedValue);
+                    },
+                  );
                 },
-                child: const Icon(Icons.remove),
               ),
-              FloatingActionButton(
-                heroTag: '11',
-                // tooltip: '12',
-                onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).increment();
+              BlocBuilder<SettingsCubit, SettingsState>(
+                builder: (context, state) {
+                  return SwitchListTile(
+                    title: const Text("Email Notifications"),
+                    value:
+                        context.read<SettingsCubit>().state.emailNotifications,
+                    onChanged: (value) {
+                      context.read<SettingsCubit>().onEmailNotifications(value);
+                    },
+                  );
                 },
-                child: const Icon(Icons.add),
-              ),
+              )
             ],
           ),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Go Back"))
-        ],
+        ),
       ),
     );
   }
