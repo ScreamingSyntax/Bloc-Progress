@@ -54,6 +54,14 @@ class HomePage extends StatelessWidget {
               return const CircularProgressIndicator();
             },
           ),
+          SizedBox(
+            height: 20,
+          ),
+          Builder(builder: (context) {
+            final counterValue = context
+                .select((CounterCubit cubit) => cubit.state.counterValue);
+            return Text("Counter Value: ${counterValue}");
+          }),
           const Text("The no. of times you pressed this button"),
           BlocConsumer<CounterCubit, CounterState>(
             listener: (context, state) {
@@ -83,14 +91,14 @@ class HomePage extends StatelessWidget {
               FloatingActionButton(
                 heroTag: '11',
                 onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).decrement();
+                  context.read<CounterCubit>().increment();
                 },
                 child: const Icon(Icons.remove),
               ),
               FloatingActionButton(
                 heroTag: '12',
                 onPressed: () {
-                  BlocProvider.of<CounterCubit>(context).increment();
+                  context.read<CounterCubit>().decrement();
                 },
                 child: const Icon(Icons.add),
               ),
